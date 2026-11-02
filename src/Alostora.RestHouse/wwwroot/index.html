@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>استراحة الأسطورة نت</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#0c1727;color:#f5f7fb;font-family:Tahoma,Arial}
+header{background:#142d4a;padding:25px 5%;border-bottom:3px solid #c93640}h1{margin:0;font-size:27px}header p{color:#d4e3f1;margin:8px 0 0}
+main{max-width:1200px;margin:auto;padding:24px}h2{font-size:22px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}.toolbar input,.toolbar select{background:#172a40;color:#fff;border:1px solid #38516d;border-radius:9px;padding:12px;font:inherit;min-width:180px}
+#library{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+.movie{background:#1a2b40;border:1px solid #2c4058;border-radius:13px;padding:16px;min-width:0}.poster{display:block;width:100%;height:245px;object-fit:cover;border-radius:9px;background:#0b1420;margin-bottom:10px}.movie h3{overflow-wrap:anywhere;font-size:17px;margin:8px 0}.movie p{color:#c4d2e1;font-size:13px;line-height:1.7;margin:8px 0}
+.meta{font-size:12px;color:#e5b6b9;margin:5px 0 12px}.movie button,.action{background:#c93640;color:white;border:0;border-radius:8px;padding:11px 18px;cursor:pointer;font-weight:bold}.movie button.secondary{background:#315577}
+#continueGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin:12px 0 24px}.continue-card{background:#172d45;border:1px solid #38516d;border-radius:11px;padding:14px}.continue-card strong{display:block;margin-bottom:7px}.continue-card p{font-size:12px;color:#c4d2e1;margin:5px 0 10px}.progress-track{height:7px;background:#30445a;border-radius:8px;overflow:hidden;margin:10px 0}.progress-fill{height:100%;background:#c93640}#continueSection{margin:20px 0 26px}#continueSection h2{margin-bottom:8px}#continueEmpty{color:#bdcadd;font-size:13px}.continue-card button{background:#c93640;color:white;border:0;border-radius:7px;padding:9px 14px;cursor:pointer;font-weight:bold}#seriesDetails{display:none;background:#14283e;border:1px solid #38516d;border-radius:14px;padding:18px;margin:18px 0 22px}
+#seriesDetails h2{margin:4px 0 8px}.series-head{display:flex;gap:18px;align-items:flex-start}.series-head img{width:145px;height:190px;object-fit:cover;border-radius:9px;background:#0b1420}.series-copy{flex:1}.series-copy p{color:#c4d2e1;line-height:1.8}.season-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}.season-tabs button{background:#263e58;color:white;border:1px solid #526b85;border-radius:8px;padding:9px 14px;cursor:pointer}.season-tabs button.active{background:#c93640;border-color:#c93640}
+.episode-list{display:grid;gap:8px}.episode{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#1c344d;padding:12px;border-radius:9px}.episode small{color:#c4d2e1}.empty{color:#bdcadd}
+#playerSection{display:none;background:#14283e;border:1px solid #38516d;border-radius:14px;padding:14px;margin:18px 0}#playerSection h2{margin:0 0 10px}video{display:block;width:100%;max-height:70vh;background:#000;border-radius:12px;margin:0}#message{color:#bdcadd}#audioControls{display:flex;gap:9px;align-items:center;flex-wrap:wrap;background:#172d45;border:1px solid #38516d;border-radius:10px;padding:11px;margin-top:10px}#audioControls select{background:#0c1727;color:#fff;border:1px solid #526b85;border-radius:7px;padding:9px;min-width:180px}#audioControls button{background:#c93640;color:white;border:0;border-radius:7px;padding:9px 14px;font-weight:bold;cursor:pointer}#playbackHint{color:#bdcadd;font-size:13px;line-height:1.7}
+@media(max-width:600px){main{padding:16px}.series-head{display:block}.series-head img{width:110px;height:145px;float:right;margin:0 0 10px 12px}.episode{align-items:flex-start}.episode button{white-space:nowrap;padding:9px 12px}}
+</style></head><body>
+<header><h1>ALOSTORA REST HOUSE</h1><p>استراحة الأسطورة نت — مكتبة المشاهدة</p></header>
+<main><h2>مكتبة الأفلام والمسلسلات</h2>
+<div class="toolbar"><input id="search" type="search" placeholder="ابحث عن فيلم أو مسلسل..."><select id="kind"><option value="">كل المحتوى</option><option value="Movie">أفلام</option><option value="Series">مسلسلات</option></select><select id="genre"><option value="">كل التصنيفات</option></select><select id="collection"><option value="">كل المكتبة</option><option value="favorites">المفضلة</option></select></div>
+<p id="message">يتم تحميل المكتبة...</p><section id="continueSection"><h2>متابعة المشاهدة</h2><p id="continueEmpty">جارٍ تحميل سجل المشاهدة...</p><div id="continueGrid"></div></section><section id="playerSection" aria-live="polite"><h2 id="nowPlayingTitle">المشغل</h2><video id="player" controls playsinline preload="metadata"></video><div id="audioControls" hidden><label for="audioTrack">المسار الصوتي:</label><select id="audioTrack"></select><button id="applyAudio" type="button">تشغيل بالصوت المحدد</button></div><p id="playbackHint"></p><p id="subtitleHint" class="meta">تُكتشف الترجمات الخارجية تلقائياً بجانب ملف الفيديو (SRT أو VTT أو ASS أو SSA)، ويمكن استخراج الترجمات النصية المدمجة عند توفر FFmpeg.</p></section><section id="seriesDetails" aria-live="polite"></section><section id="library"></section></main>
+<script>
+function createViewerId(){try{if(window.crypto&&typeof crypto.randomUUID==='function')return crypto.randomUUID();if(window.crypto&&crypto.getRandomValues){const bytes=new Uint8Array(16);crypto.getRandomValues(bytes);return Array.from(bytes,b=>b.toString(16).padStart(2,'0')).join('');}}catch{}return 'viewer-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2);}
+let viewerId='';try{viewerId=localStorage.getItem('alostora-viewer')||'';if(!viewerId){viewerId=createViewerId();localStorage.setItem('alostora-viewer',viewerId);}}catch{viewerId=createViewerId();}
+let favorites=new Set();try{favorites=new Set(JSON.parse(localStorage.getItem('alostora-favorites')||'[]'));}catch{}
+let activeVideo=null,loadedVideoId=null,items=[],seriesItems=[],progressRows=[],saveTimer=null,playbackGeneration=0;const player=document.querySelector('#player');
+async function saveProgress(snapshot=activeVideo,refresh=false){if(!snapshot||!loadedVideoId||snapshot.id!==loadedVideoId||player.readyState<1||!Number.isFinite(player.currentTime)||!Number.isFinite(player.duration)||player.duration<=0)return;const duration=player.duration,position=Math.min(player.currentTime,duration);try{const response=await fetch('/api/progress',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({viewerId,videoId:snapshot.id,positionSeconds:position,durationSeconds:duration})});if(response.ok&&refresh)await loadProgress();}catch{}}
+function flushProgress(){if(!activeVideo||!loadedVideoId||activeVideo.id!==loadedVideoId||player.readyState<1||!Number.isFinite(player.currentTime)||!Number.isFinite(player.duration)||player.duration<=0)return;const payload=JSON.stringify({viewerId,videoId:activeVideo.id,positionSeconds:Math.min(player.currentTime,player.duration),durationSeconds:player.duration});try{fetch('/api/progress',{method:'POST',headers:{'Content-Type':'application/json'},body:payload,keepalive:true}).catch(()=>{});}catch{}}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')flushProgress();});
+window.addEventListener('pagehide',flushProgress);
+async function loadProgress(){try{const response=await fetch('/api/progress/'+encodeURIComponent(viewerId));if(!response.ok)return;progressRows=await response.json();renderContinue();}catch{document.querySelector('#continueEmpty').textContent='تعذر تحميل سجل المشاهدة.';}}
+function renderContinue(){const grid=document.querySelector('#continueGrid'),empty=document.querySelector('#continueEmpty');grid.replaceChildren();const episodeMap=new Map();for(const series of seriesItems)for(const season of series.seasons||[])for(const ep of season.episodes||[])episodeMap.set(ep.videoId,{series:series.title,season:season.title||('الموسم '+season.seasonNumber),episode:ep.episodeNumber});const libraryMap=new Map(items.map(x=>[x.id,x]));const rows=[...progressRows].filter(x=>libraryMap.has(x.videoId)&&x.positionSeconds>3&&(!x.durationSeconds||x.positionSeconds<x.durationSeconds-15)).sort((a,b)=>new Date(b.updatedUtc)-new Date(a.updatedUtc)).slice(0,8);empty.textContent=rows.length?'آخر ما شاهدته — يمكنك المتابعة من حيث توقفت.':'لا توجد مشاهدات سابقة بعد.';for(const row of rows){const video=libraryMap.get(row.videoId),episode=episodeMap.get(row.videoId);const title=episode?'الحلقة '+episode.episode+' — '+(video?.title||'حلقة'):video?.title||'فيديو من المكتبة';const card=document.createElement('article');card.className='continue-card';const name=document.createElement('strong');name.textContent=episode?episode.series+' — '+title:title;const details=document.createElement('p');details.textContent=episode?episode.season+' • '+formatTime(row.positionSeconds)+' من '+formatTime(row.durationSeconds):'وصلت إلى '+formatTime(row.positionSeconds)+' من '+formatTime(row.durationSeconds);const track=document.createElement('div');track.className='progress-track';const fill=document.createElement('div');fill.className='progress-fill';fill.style.width=(row.durationSeconds>0?Math.min(100,row.positionSeconds/row.durationSeconds*100):0)+'%';track.append(fill);const btn=document.createElement('button');btn.textContent='استكمال المشاهدة';btn.onclick=()=>{const item=video?{id:video.id,url:video.url,title:video.title}:{id:row.videoId,url:'/media/'+row.videoId,title};if(item.url)play(item);};card.append(name,details,track,btn);grid.append(card);}}
+function formatTime(value){if(!Number.isFinite(value)||value<=0)return '0:00';const n=Math.floor(value),h=Math.floor(n/3600),m=Math.floor(n%3600/60),sec=n%60;return h?h+':'+String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0'):m+':'+String(sec).padStart(2,'0');}
+player.addEventListener('timeupdate',()=>{if(!saveTimer&&activeVideo){const snapshot=activeVideo,generation=playbackGeneration;saveTimer=setTimeout(()=>{saveTimer=null;if(generation===playbackGeneration)saveProgress(snapshot);},10000);}});
+player.addEventListener('pause',()=>{if(activeVideo)saveProgress(activeVideo,true);});
+player.addEventListener('ended',()=>{if(activeVideo)saveProgress(activeVideo,true);});
+function makePoster(path,title){if(!path)return null;const img=document.createElement('img');img.className='poster';img.src=path;img.alt='غلاف '+title;img.loading='lazy';return img;}
+function favoriteKey(item){return item.seriesId?'series:'+item.seriesId:item.id?'video:'+item.id:'';}
+function toggleFavorite(item){const key=favoriteKey(item);if(!key)return;if(favorites.has(key))favorites.delete(key);else favorites.add(key);try{localStorage.setItem('alostora-favorites',JSON.stringify([...favorites]));}catch{}render();}
+function addFavoriteButton(card,item){const button=document.createElement('button');button.className='secondary';button.textContent=favorites.has(favoriteKey(item))?'★ إزالة من المفضلة':'☆ أضف للمفضلة';button.onclick=()=>toggleFavorite(item);card.append(button);}
+function render(){const box=document.querySelector('#library'),msg=document.querySelector('#message'),q=document.querySelector('#search').value.trim().toLocaleLowerCase('ar'),kind=document.querySelector('#kind').value,genre=document.querySelector('#genre').value,collection=document.querySelector('#collection').value;const matchesCollection=item=>!collection||(collection==='favorites'&&favorites.has(favoriteKey(item)));
+const movies=items.filter(x=>x.kind!=='Series'&&matchesCollection(x)&&(!kind||kind==='Movie')&&(!genre||x.genre===genre)&&[x.title,x.description,x.genre].join(' ').toLocaleLowerCase('ar').includes(q));
+const knownSeriesTitles=new Set(seriesItems.map(x=>(x.title||'').trim().toLocaleLowerCase('ar')));const series=seriesItems.filter(x=>matchesCollection(x)&&(!kind||kind==='Series')&&(!genre||x.genre===genre)&&[x.title,x.description,x.genre].join(' ').toLocaleLowerCase('ar').includes(q));
+const fallbackSeries=items.filter(x=>x.kind==='Series'&&!knownSeriesTitles.has((x.title||'').trim().toLocaleLowerCase('ar'))&&matchesCollection(x)&&(!kind||kind==='Series')&&(!genre||x.genre===genre)&&[x.title,x.description,x.genre].join(' ').toLocaleLowerCase('ar').includes(q));
+box.replaceChildren();msg.textContent=(movies.length+series.length+fallbackSeries.length)?'عدد النتائج: '+(movies.length+series.length+fallbackSeries.length):(items.length||seriesItems.length?'لا توجد نتائج مطابقة.':'المكتبة فارغة حالياً. أضف ملفات فيديو إلى مجلد المكتبة.');
+for(const item of [...series,...fallbackSeries]){const card=document.createElement('article');card.className='movie';const poster=makePoster(item.posterPath,item.title);if(poster)card.append(poster);const title=document.createElement('h3');title.textContent=item.title;const meta=document.createElement('div');meta.className='meta';meta.textContent=['مسلسل',item.year,item.genre].filter(Boolean).join(' • ');const desc=document.createElement('p');desc.textContent=item.description||'مسلسل';const btn=document.createElement('button');btn.textContent='عرض المواسم والحلقات';btn.onclick=()=>item.seriesId?showSeries(item):play(item);card.append(title,meta,desc,btn);addFavoriteButton(card,item);box.append(card);}
+for(const item of movies){const card=document.createElement('article');card.className='movie';const poster=makePoster(item.posterPath,item.title);if(poster)card.append(poster);const title=document.createElement('h3');title.textContent=item.title;const meta=document.createElement('div');meta.className='meta';meta.textContent=[item.year,item.genre,item.director?'إخراج '+item.director:'',item.rating!=null?'التقييم '+item.rating+'/10':'',item.runtimeMinutes?item.runtimeMinutes+' دقيقة':'',item.releaseDate].filter(Boolean).join(' • ')||'فيلم';const desc=document.createElement('p');desc.textContent=[item.description||'لا يوجد وصف لهذا العمل بعد.',item.cast?'بطولة: '+item.cast:'',item.tags?'وسوم: '+item.tags:''].filter(Boolean).join(' — ');const btn=document.createElement('button');btn.textContent='شاهد الآن';btn.onclick=()=>play(item);card.append(title,meta,desc,btn);addFavoriteButton(card,item);box.append(card);}}
+function showSeries(series){const panel=document.querySelector('#seriesDetails');panel.replaceChildren();panel.style.display='block';const head=document.createElement('div');head.className='series-head';const poster=makePoster(series.posterPath,series.title);if(poster){poster.style.flex='0 0 145px';head.append(poster);}const copy=document.createElement('div');copy.className='series-copy';const title=document.createElement('h2');title.textContent=series.title;const meta=document.createElement('div');meta.className='meta';meta.textContent=[series.year,series.genre].filter(Boolean).join(' • ');const desc=document.createElement('p');desc.textContent=series.description||'لا يوجد وصف لهذا المسلسل.';const close=document.createElement('button');close.className='action';close.textContent='إغلاق التفاصيل';close.onclick=()=>{panel.style.display='none';};copy.append(title,meta,desc,close);head.append(copy);panel.append(head);
+const seasons=series.seasons||[];if(!seasons.length){const empty=document.createElement('p');empty.className='empty';empty.textContent='لم تتم إضافة مواسم أو حلقات لهذا المسلسل بعد.';panel.append(empty);return;}
+const tabs=document.createElement('div');tabs.className='season-tabs';const list=document.createElement('div');list.className='episode-list';panel.append(tabs,list);
+function selectSeason(season,button){tabs.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b===button));list.replaceChildren();if(!season.episodes?.length){const empty=document.createElement('p');empty.className='empty';empty.textContent='لا توجد حلقات في هذا الموسم بعد.';list.append(empty);return;}for(const ep of season.episodes){const row=document.createElement('div');row.className='episode';const label=document.createElement('div');const name=document.createElement('strong');name.textContent='الحلقة '+ep.episodeNumber+' — '+ep.title;const small=document.createElement('small');small.textContent=ep.isMissing?'ملف الحلقة غير موجود في المكتبة — أعد ربط الحلقة من لوحة الإدارة.':[ep.director?'إخراج '+ep.director:'',ep.cast?'بطولة '+ep.cast:'',ep.rating!=null?'التقييم '+ep.rating+'/10':'',ep.runtimeMinutes?ep.runtimeMinutes+' دقيقة':'',ep.releaseDate].filter(Boolean).join(' • ')||'تشغيل الحلقة واستكمال المشاهدة من آخر موضع';label.append(name,document.createElement('br'),small);const btn=document.createElement('button');btn.className='action';btn.textContent=ep.isMissing?'الملف مفقود':'تشغيل';btn.disabled=!!ep.isMissing||!ep.url;if(!btn.disabled)btn.onclick=()=>play({id:ep.videoId,url:ep.url,title:ep.title});row.append(label,btn);list.append(row);}}
+seasons.forEach((season,index)=>{const button=document.createElement('button');button.textContent=season.title||('الموسم '+season.seasonNumber);button.onclick=()=>selectSeason(season,button);tabs.append(button);if(index===0)selectSeason(season,button);});panel.scrollIntoView({behavior:'smooth',block:'start'});}
+async function wait(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
+async function startTranscodedPlayback(item,audioIndex,generation,saved){
+ const hint=document.querySelector('#playbackHint');hint.textContent='جارٍ تجهيز نسخة متوافقة للتشغيل. قد يستغرق التحويل وقتاً حسب حجم الفيديو وقوة الكمبيوتر...';
+ const response=await fetch('/api/playback/'+encodeURIComponent(item.id)+'/prepare',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({audioStreamIndex:audioIndex})});
+ if(!response.ok){let message='تعذر بدء تحويل الفيديو.';try{const data=await response.json();message=data.message||message;}catch{}throw new Error(message);}
+ let job=await response.json();
+ for(let attempt=0;attempt<43200;attempt++){
+  if(generation!==playbackGeneration)return;
+  if(job.state==='ready'&&job.url){hint.textContent='تم تجهيز الفيديو. يبدأ التشغيل الآن.';player.onloadedmetadata=()=>{if(generation!==playbackGeneration)return;loadedVideoId=item.id;activeVideo={id:item.id};if(saved&&Number.isFinite(saved.positionSeconds)&&saved.positionSeconds>5&&Number.isFinite(player.duration)&&saved.positionSeconds<player.duration-10)player.currentTime=saved.positionSeconds;player.play().catch(()=>{hint.textContent='اضغط زر التشغيل في مشغل الفيديو لبدء المشاهدة.';});};player.src=job.url;player.load();return;}
+  if(job.state==='failed'||job.state==='missing')throw new Error(job.message||'فشل تحويل الفيديو.');
+  hint.textContent=job.message||'جارٍ تحويل الفيديو...';
+  await wait(1500);
+  const status=await fetch('/api/playback/jobs/'+encodeURIComponent(job.jobId));
+  if(!status.ok)throw new Error('انقطع الاتصال أثناء تجهيز الفيديو.');
+  job=await status.json();
+ }
+ throw new Error('استغرق تحويل الفيديو وقتاً أطول من المتوقع. يمكنك المحاولة مرة أخرى.');
+}
+async function play(item){
+ if(!item||!item.id||!item.url)return;
+ const playerSection=document.querySelector('#playerSection');playerSection.style.display='block';document.querySelector('#nowPlayingTitle').textContent='يتم تشغيل: '+(item.title||'الفيديو المحدد');playerSection.scrollIntoView({behavior:'smooth',block:'start'});
+ const generation=++playbackGeneration,previous=activeVideo;
+ player.dataset.transcodeAttempted='0';player.onerror=null;
+ player.pause();if(saveTimer){clearTimeout(saveTimer);saveTimer=null;}
+ if(previous)await saveProgress(previous,false);
+ if(generation!==playbackGeneration)return;
+ activeVideo=null;loadedVideoId=null;player.onloadedmetadata=null;
+ const audioControls=document.querySelector('#audioControls'),audioSelect=document.querySelector('#audioTrack'),hint=document.querySelector('#playbackHint');
+ audioControls.hidden=true;audioSelect.replaceChildren();hint.textContent='جارٍ فحص مسارات الصوت...';
+ let saved=null,subtitleTracks=[],probe=null;
+ try{const r=await fetch('/api/progress/'+encodeURIComponent(viewerId));if(r.ok){const rows=await r.json();saved=rows.find(x=>x.videoId===item.id)||null;}}catch{}
+ try{const sr=await fetch('/api/subtitles/'+encodeURIComponent(item.id));if(sr.ok)subtitleTracks=await sr.json();}catch{}
+ try{const ar=await fetch('/api/playback/'+encodeURIComponent(item.id)+'/tracks');if(ar.ok)probe=await ar.json();}catch{}
+ if(generation!==playbackGeneration)return;
+ if(probe?.available&&probe?.success&&Array.isArray(probe.embeddedSubtitles)){
+  for(const sub of probe.embeddedSubtitles){
+   const lang=(sub.language||'und').toLowerCase();
+   const languageLabel=({ar:'العربية',ara:'العربية',en:'English',eng:'English',fr:'Français',fre:'Français',fra:'Français',tr:'Türkçe',tur:'Türkçe',es:'Español',spa:'Español'})[lang]||lang.toUpperCase();
+   subtitleTracks.push({label:[languageLabel,sub.title,sub.codec].filter(Boolean).join(' — '),language:lang,url:'/api/subtitles/'+encodeURIComponent(item.id)+'/embedded/'+sub.index,isDefault:sub.isDefault,isForced:false,isSdh:false});
+  }
+ }
+ player.querySelectorAll('track').forEach(track=>track.remove());
+ const preferredSubtitleIndex=subtitleTracks.findIndex(sub=>sub.isDefault)>=0?subtitleTracks.findIndex(sub=>sub.isDefault):subtitleTracks.findIndex(sub=>sub.language==='ar'||sub.language==='ara');
+ subtitleTracks.forEach((sub,index)=>{const track=document.createElement('track');track.kind='subtitles';track.label=sub.label||'ترجمة';track.srclang=sub.language||'und';track.src=sub.url;if(index===preferredSubtitleIndex)track.default=true;track.addEventListener('load',()=>{if(track.default)track.track.mode='showing';});player.append(track);});
+ document.querySelector('#subtitleHint').textContent=subtitleTracks.length?'الترجمات المتاحة: '+subtitleTracks.map(x=>x.label).join('، ')+' — اختر الترجمة من زر CC في المشغل.':'لا توجد ترجمة خارجية لهذا الملف. ضع ملف SRT أو VTT أو ASS أو SSA بجانب الفيديو وبنفس اسمه.';
+ const tracks=probe?.audioTracks||[];
+ const selectedDefault=tracks.find(x=>x.isDefault)||tracks[0]||null;
+ if(tracks.length>1&&probe?.available&&probe?.success){
+  for(const track of tracks){const option=document.createElement('option');option.value=track.index;const lang=track.language&&track.language!=='und'?track.language.toUpperCase():'لغة غير محددة';option.textContent=[lang,track.title,track.codec].filter(Boolean).join(' — ');if(selectedDefault&&track.index===selectedDefault.index)option.selected=true;audioSelect.append(option);}
+  audioControls.hidden=false;
+ }
+ if(probe?.needsConversion){
+  if(!probe.available||!probe.success){hint.textContent='هذا الملف يحتاج إلى تحويل للتشغيل، لكن محرك FFmpeg غير جاهز: '+(probe.message||'راجع إعدادات FFmpeg في لوحة الإدارة.');return;}
+  try{await startTranscodedPlayback(item,selectedDefault?.index??null,generation,saved);}catch(ex){hint.textContent='تعذر تجهيز الفيديو: '+ex.message;}
+  return;
+ }
+ hint.textContent=tracks.length>1?'يمكنك اختيار مسار صوتي آخر ثم الضغط على «تشغيل بالصوت المحدد».':'تشغيل مباشر دون تحويل.';
+ player.onloadedmetadata=()=>{if(generation!==playbackGeneration)return;loadedVideoId=item.id;activeVideo={id:item.id};if(saved&&Number.isFinite(saved.positionSeconds)&&saved.positionSeconds>5&&Number.isFinite(player.duration)&&player.duration>0&&saved.positionSeconds<player.duration-10)player.currentTime=saved.positionSeconds;player.play().catch(()=>{hint.textContent='اضغط زر التشغيل في مشغل الفيديو لبدء المشاهدة.';});};
+ player.onerror=async()=>{if(generation!==playbackGeneration||player.dataset.transcodeAttempted==='1')return;if(!probe?.available||!probe?.success){hint.textContent='المتصفح لم يستطع تشغيل ترميز هذا الملف، ومحرك التحويل غير متاح. جهّز FFmpeg من لوحة الإدارة لإتاحة التحويل التلقائي.';return;}player.dataset.transcodeAttempted='1';try{hint.textContent='المتصفح لا يدعم ترميز هذا الملف مباشرة. جارٍ تحويله تلقائياً...';await startTranscodedPlayback(item,selectedDefault?.index??null,generation,saved);}catch(ex){hint.textContent='تعذر تشغيل ترميز الفيديو: '+ex.message;}};
+ player.src=item.url;player.load();
+}
+document.querySelector('#applyAudio').addEventListener('click',async()=>{
+ if(!activeVideo)return;
+ const item=items.find(x=>x.id===activeVideo.id)||{id:activeVideo.id,url:'/media/'+activeVideo.id,title:'الفيديو'};
+ const selected=Number(document.querySelector('#audioTrack').value);
+ if(!Number.isInteger(selected))return;
+ const generation=++playbackGeneration,previous=activeVideo;
+ player.pause();if(saveTimer){clearTimeout(saveTimer);saveTimer=null;}
+ if(previous)await saveProgress(previous,false);
+ if(generation!==playbackGeneration)return;
+ activeVideo=null;loadedVideoId=null;
+ let saved=null;try{const r=await fetch('/api/progress/'+encodeURIComponent(viewerId));if(r.ok){const rows=await r.json();saved=rows.find(x=>x.videoId===item.id)||null;}}catch{}
+ if(generation!==playbackGeneration)return;
+ try{await startTranscodedPlayback(item,selected,generation,saved);}catch(ex){if(generation===playbackGeneration)document.querySelector('#playbackHint').textContent='تعذر تغيير المسار الصوتي: '+ex.message;}
+});
+async function load(){try{const [libraryResponse,seriesResponse]=await Promise.all([fetch('/api/library'),fetch('/api/series')]);if(!libraryResponse.ok||!seriesResponse.ok)throw Error();items=await libraryResponse.json();seriesItems=await seriesResponse.json();const genres=[...new Set([...items,...seriesItems].map(x=>x.genre).filter(Boolean))].sort();const select=document.querySelector('#genre');for(const g of genres){const o=document.createElement('option');o.value=g;o.textContent=g;select.append(o);}render();await loadProgress();}catch{document.querySelector('#message').textContent='تعذر الاتصال بالسيرفر أو تحميل بيانات المسلسلات.';document.querySelector('#continueEmpty').textContent='تعذر تحميل سجل المشاهدة.';}}
+for(const id of ['search','kind','genre','collection'])document.getElementById(id).addEventListener(id==='search'?'input':'change',render);load();
+</script></body></html>

@@ -1,0 +1,1 @@
+<Application x:Class="Alostora.RestHouse.App" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Startup="OnStartup" Exit="OnExit"><Application.Resources/></Application>
